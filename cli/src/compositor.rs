@@ -23,10 +23,37 @@ pub enum SlotAsset {
     None,
 }
 
-/// Load an image from a file path for compositing
+/// Load an image from a file path for compositing (supports SVG via resvg)
 pub fn load_image_asset(path: &Path) -> Result<DynamicImage> {
-    let img = image::open(path)?;
-    Ok(img)
+    let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
+
+    if ext.eq_ignore_ascii_case("svg") {
+        load_svg(path)
+    } else {
+        let img = image::open(path)?;
+        Ok(img)
+    }
+}
+
+/// Render an SVG file to a DynamicImage using resvg
+fn load_svg(path: &Path) -> Result<DynamicImage> {
+    let svg_data = std::fs::read(path)?;
+    let tree = resvg::usvg::Tree::from_data(&svg_data, &resvg::usvg::Options::default())?;
+    let size = tree.size();
+    let width = size.width().ceil() as u32;
+    let height = size.height().ceil() as u32;
+
+    let mut pixmap = resvg::tiny_skia::Pixmap::new(width, height)
+        .ok_or_else(|| anyhow::anyhow!("Failed to create pixmap for SVG"))?;
+
+    resvg::render(&tree, resvg::tiny_skia::Transform::default(), &mut pixmap.as_mut());
+
+    // Convert from premultiplied RGBA to straight RGBA
+    let pixels = pixmap.data();
+    let img = RgbaImage::from_raw(width, height, pixels.to_vec())
+        .ok_or_else(|| anyhow::anyhow!("Failed to create image from SVG pixels"))?;
+
+    Ok(DynamicImage::ImageRgba8(img))
 }
 
 /// Composite all active slots onto a base frame at the given timestamp
