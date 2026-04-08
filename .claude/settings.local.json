@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/cmcgennis/Dev/cmcg/ status)",
+      "Bash(npm --version)",
+      "Bash(tsc --version)",
+      "Bash(npx tsc:*)",
+      "Bash(curl -s \"https://www.google.com/search?q=dynamic+creative+optimization+DCO+video+ads+2025+2026+landscape\" -H \"User-Agent: Mozilla/5.0\")",
+      "WebSearch",
+      "Bash(ffmpeg -y -f lavfi -i \"color=c=#0b0c10:s=1920x1080:d=15,drawtext=text='CMCG Base Video Layer':fontcolor=#252840:fontsize=48:x=\\(w-text_w\\)/2:y=\\(h-text_h\\)/2-30,drawtext=text='This is the static background':fontcolor=#1b1e2e:fontsize=24:x=\\(w-text_w\\)/2:y=\\(h-text_h\\)/2+30\" -f lavfi -i \"sine=frequency=0:duration=15\" -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest /Users/cmcgennis/Dev/cmcg/sample/base/background.mp4)",
+      "Bash(ffmpeg -y -f lavfi -i \"color=c=#0b0c10:s=1920x1080:d=15:r=30\" -f lavfi -i \"sine=frequency=0:duration=15\" -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest /Users/cmcgennis/Dev/cmcg/sample/base/background.mp4)",
+      "Bash(npm install:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(kill %1)",
+      "Bash(npx vite:*)",
+      "Bash(curl -s http://localhost:5199/manifest.json)",
+      "Bash(curl:*)",
+      "Bash(kill %2)",
+      "Bash(git:*)"
+    ]
+  }
+}

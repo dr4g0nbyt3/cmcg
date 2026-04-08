@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CMCG — Product Design Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0b0c10;
+    --surface: #131520;
+    --surface2: #1b1e2e;
+    --border: #252840;
+    --accent: #4fffb0;
+    --accent2: #7b61ff;
+    --accent3: #ff6b6b;
+    --text: #e8eaf6;
+    --muted: #7b7f9e;
+    --tag-bg: #1e2240;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    padding: 0 0 80px 0;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #111428 60%, #0b1220 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(123,97,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 400px; height: 300px;
+    background: radial-gradient(circle, rgba(79,255,176,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .doc-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(79,255,176,0.08);
+    border: 1px solid rgba(79,255,176,0.2);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-bottom: 24px;
+  }
+
+  .doc-label::before {
+    content: '●';
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  h1 .accent { color: var(--accent); }
+  h1 .dim { color: var(--muted); font-weight: 400; font-size: 0.55em; display: block; letter-spacing: 0.02em; margin-top: 6px; font-family: 'IBM Plex Mono', monospace; }
+
+  .hero-desc {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 580px;
+    margin: 20px 0 32px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta b { color: var(--text); }
+
+  /* LAYOUT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* SECTIONS */
+  section {
+    margin-top: 56px;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 28px 0 10px;
+    letter-spacing: 0.01em;
+  }
+
+  p {
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
+  p strong { color: var(--text); font-weight: 500; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .icon-green { background: rgba(79,255,176,0.12); }
+  .icon-purple { background: rgba(123,97,255,0.12); }
+  .icon-red { background: rgba(255,107,107,0.12); }
+  .icon-blue { background: rgba(97,156,255,0.12); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #080a12;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #a8b4ff;
+    overflow-x: auto;
+    margin: 16px 0;
+    white-space: pre;
+  }
+  .code-block .key { color: var(--accent); }
+  .code-block .val { color: #ffd580; }
+  .code-block .url { color: #61b6ff; text-decoration: underline; }
+  .code-block .comment { color: #3d4266; font-style: italic; }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .flow-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    text-align: center;
+    min-width: 110px;
+    position: relative;
+  }
+  .flow-step small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 18px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* TAG PILLS */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .tag {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 3px 10px;
+  }
+  .tag.green { color: var(--accent); border-color: rgba(79,255,176,0.2); background: rgba(79,255,176,0.05); }
+  .tag.purple { color: var(--accent2); border-color: rgba(123,97,255,0.2); background: rgba(123,97,255,0.05); }
+  .tag.red { color: var(--accent3); border-color: rgba(255,107,107,0.2); background: rgba(255,107,107,0.05); }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(37,40,64,0.5);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  td:first-child { color: var(--text); font-weight: 500; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout-green { background: rgba(79,255,176,0.06); border: 1px solid rgba(79,255,176,0.18); }
+  .callout-purple { background: rgba(123,97,255,0.06); border: 1px solid rgba(123,97,255,0.18); }
+  .callout-red { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.18); }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout p { margin: 0; font-size: 13.5px; }
+  .callout strong { color: var(--text); }
+
+  /* NUMBERED LIST */
+  .steps { list-style: none; counter-reset: steps; }
+  .steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(steps, decimal-leading-zero);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(79,255,176,0.08);
+    border: 1px solid rgba(79,255,176,0.2);
+    border-radius: 4px;
+    min-width: 32px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .steps li p { margin: 0; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* STATUS BADGE */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .status-draft { background: rgba(255,175,50,0.1); color: #ffaf32; border: 1px solid rgba(255,175,50,0.2); }
+
+  /* PHASE TIMELINE */
+  .phases { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
+  .phase {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+  .phase:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .phase-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .phase-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .phase-content p { font-size: 13px; margin: 0; }
+
+  /* PRINT */
+  @media print {
+    body { background: #fff; color: #111; }
+    .hero { background: #f5f5f5; }
+    .card, .code-block { border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="doc-label">Product Design Document</div>
+    <h1>
+      <span class="accent">CMCG</span>
+      <span class="dim">// Connected Media Container &amp; Generator</span>
+    </h1>
+    <p class="hero-desc">
+      A dynamic video container format where embedded media assets — images, clips, overlays — are resolved from live URLs or local variables at render time, enabling a single video template to display different content without re-encoding.
+    </p>
+    <div class="hero-meta">
+      <span><b>Version</b> 0.3 — Market Research &amp; AI Strategy</span>
+      <span><b>Owner</b> Nostalgia Nuke LLC / Caleb</span>
+      <span><b>Output Format</b> .cmcg + exportable .mp4</span>
+      <span class="status status-draft">● Draft</span>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="container">
+
+  <!-- WHAT IS IT -->
+  <section>
+    <div class="section-label">01 — Overview</div>
+    <h2>What is CMCG?</h2>
+    <p>
+      CMCG (Connected Media Container &amp; Generator) is a <strong>dynamic video template format</strong>. Think of it like an HTML page for video — the structure, timing, and layout are fixed, but the media <em>slots</em> inside it can be populated from URLs, local files, or runtime variables at the moment of playback or render.
+    </p>
+    <p>
+      A <strong>.cmcg file</strong> is essentially a JSON/manifest container that describes a video timeline. Each "slot" in that timeline points to a media source — a URL, a local file path, or a named variable. When played or exported, the runtime fetches those sources and composites them into the final video.
+    </p>
+    <div class="callout callout-green">
+      <div class="callout-icon">💡</div>
+      <p><strong>Simplest analogy:</strong> It's a video template. Like a billboard that you can swap the ad image on without reprinting the whole board — except the "billboard" is a video and the swapping happens automatically via URL or variable.</p>
+    </div>
+  </section>
+
+  <!-- CORE CONCEPT -->
+  <section>
+    <div class="section-label">02 — Core Concept</div>
+    <h2>How The Media Fetching Works</h2>
+    <p>Each media slot in a CMCG template has a <strong>source resolver</strong>. The resolver checks a priority chain:</p>
+
+    <div class="flow">
+      <div class="flow-step">Local Variable<small>e.g. $myImage</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Local File Path<small>/assets/ad.png</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Remote URL<small>https://cdn.../img.jpg</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Fallback Asset<small>placeholder.png</small></div>
+    </div>
+
+    <p>This means the same template can serve a <strong>local ad</strong> when running offline, a <strong>remote ad</strong> when connected, or a <strong>dynamic ad</strong> when a variable is passed in at runtime (e.g. from your app, a URL parameter, or a script).</p>
+
+    <h3>Example Slot Definition</h3>
+    <div class="code-block"><span class="comment">// Inside a .cmcg manifest — one media slot</span>
+{
+  <span class="key">"id"</span>: <span class="val">"slot_ad_banner"</span>,
+  <span class="key">"type"</span>: <span class="val">"image"</span>,          <span class="comment">// or "video", "overlay", "text"</span>
+  <span class="key">"start"</span>: <span class="val">2.0</span>,              <span class="comment">// seconds into video timeline</span>
+  <span class="key">"duration"</span>: <span class="val">8.0</span>,
+  <span class="key">"position"</span>: { <span class="key">"x"</span>: <span class="val">40</span>, <span class="key">"y"</span>: <span class="val">620</span>, <span class="key">"w"</span>: <span class="val">1840</span>, <span class="key">"h"</span>: <span class="val">200</span> },
+  <span class="key">"source"</span>: {
+    <span class="key">"variable"</span>: <span class="val">"$adImage"</span>,        <span class="comment">// check variable first</span>
+    <span class="key">"local"</span>: <span class="val">"./assets/ad.png"</span>,   <span class="comment">// fallback to local file</span>
+    <span class="key">"remote"</span>: <span class="url">"https://cdn.example.com/ads/current.jpg"</span>,
+    <span class="key">"fallback"</span>: <span class="val">"./assets/placeholder.png"</span>
+  },
+  <span class="key">"cache"</span>: <span class="val">"session"</span>,           <span class="comment">// none | session | permanent</span>
+  <span class="key">"fetchTimeout"</span>: <span class="val">3000</span>          <span class="comment">// ms before falling back</span>
+}</div>
+  </section>
+
+  <!-- FILE FORMAT -->
+  <section>
+    <div class="section-label">03 — File Format</div>
+    <h2>The .cmcg File Structure</h2>
+    <p>A <strong>.cmcg file</strong> is a ZIP-like bundle (similar to .docx or .apk) containing:</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><div class="icon icon-green">📄</div>manifest.json</div>
+        <p>The full timeline definition — slots, timing, resolution, frame rate, audio tracks, and variable declarations.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-purple">🖼️</div>/assets/</div>
+        <p>Optional embedded local fallback assets — images, audio clips, video segments that travel with the file.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-blue">🎞️</div>/base/</div>
+        <p>The base video layer(s) — static background video, intro/outro sequences, static overlays that never change.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-red">⚙️</div>config.json</div>
+        <p>Runtime settings — default variables, fetch behavior, MP4 export resolution, render quality presets.</p>
+      </div>
+    </div>
+
+    <h3>Full Manifest Example</h3>
+    <div class="code-block">{
+  <span class="key">"cmcg_version"</span>: <span class="val">"1.0"</span>,
+  <span class="key">"meta"</span>: {
+    <span class="key">"name"</span>: <span class="val">"Summer Ad Template"</span>,
+    <span class="key">"resolution"</span>: [<span class="val">1920</span>, <span class="val">1080</span>],
+    <span class="key">"fps"</span>: <span class="val">30</span>,
+    <span class="key">"duration"</span>: <span class="val">30.0</span>
+  },
+  <span class="key">"variables"</span>: {
+    <span class="key">"$adImage"</span>: <span class="val">null</span>,           <span class="comment">// passed at runtime</span>
+    <span class="key">"$brandColor"</span>: <span class="val">"#ff6b6b"</span>,
+    <span class="key">"$logoUrl"</span>: <span class="val">null</span>
+  },
+  <span class="key">"base_video"</span>: <span class="val">"./base/background.mp4"</span>,
+  <span class="key">"slots"</span>: [
+    { <span class="comment">/* slot_ad_banner defined above */</span> },
+    {
+      <span class="key">"id"</span>: <span class="val">"slot_logo"</span>,
+      <span class="key">"type"</span>: <span class="val">"image"</span>,
+      <span class="key">"start"</span>: <span class="val">0</span>, <span class="key">"duration"</span>: <span class="val">30</span>,
+      <span class="key">"source"</span>: {
+        <span class="key">"variable"</span>: <span class="val">"$logoUrl"</span>,
+        <span class="key">"local"</span>: <span class="val">"./assets/logo.png"</span>
+      }
+    }
+  ]
+}</div>
+  </section>
+
+  <!-- VARIABLE SYSTEM -->
+  <section>
+    <div class="section-label">04 — Variable System</div>
+    <h2>How Variables Work</h2>
+    <p>Variables are the power feature. They allow external systems — websites, apps, scripts — to inject content into a CMCG template without touching the file itself.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Variable Type</th>
+          <th>How It's Set</th>
+          <th>Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>$localVar</td>
+          <td>Hardcoded in config.json or at launch</td>
+          <td>Offline use, kiosk displays</td>
+        </tr>
+        <tr>
+          <td>$urlParam</td>
+          <td>Passed as a query parameter to a web player</td>
+          <td>?adImage=https://... in browser URL</td>
+        </tr>
+        <tr>
+          <td>$envVar</td>
+          <td>Environment variable at CLI render time</td>
+          <td>Server-side batch rendering pipeline</td>
+        </tr>
+        <tr>
+          <td>$apiVar</td>
+          <td>Fetched from a JSON endpoint at play time</td>
+          <td>Dynamic ad network, real-time content</td>
+        </tr>
+        <tr>
+          <td>$scriptVar</td>
+          <td>Injected via JS if using the web runtime</td>
+          <td>App integration, A/B testing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">🔌</div>
+      <p><strong>API Variable Example:</strong> A slot can point its <code>$adImage</code> variable to a JSON endpoint that returns <code>{"imageUrl": "https://..."}</code> — so every time the video plays, it fetches the latest ad image. Perfect for ad rotation, seasonal content, or personalization.</p>
+    </div>
+  </section>
+
+  <!-- MP4 EXPORT -->
+  <section>
+    <div class="section-label">05 — MP4 Export</div>
+    <h2>Saving / Exporting as .mp4</h2>
+    <p>
+      A CMCG file is a <em>live/dynamic</em> format. But you can <strong>bake it</strong> into a static .mp4 at any time. The renderer fetches all remote sources, resolves all variables, composites the layers, and encodes to H.264/H.265 video.
+    </p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><div class="icon icon-green">▶</div>Live Playback (.cmcg)</div>
+        <p>Dynamic. Fetches fresh media every time. Variables can differ per session. Requires the CMCG runtime player.</p>
+        <div class="tags"><span class="tag green">dynamic</span><span class="tag green">live URLs</span><span class="tag green">swappable</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-purple">💾</div>Baked Export (.mp4)</div>
+        <p>Static snapshot. All sources resolved at export time. Plays anywhere. No runtime needed.</p>
+        <div class="tags"><span class="tag purple">portable</span><span class="tag purple">shareable</span><span class="tag purple">universal</span></div>
+      </div>
+    </div>
+
+    <h3>Export CLI (Planned)</h3>
+    <div class="code-block"><span class="comment"># Render with variable overrides, export to mp4</span>
+cmcg render ./my-template.cmcg \
+  --var adImage=<span class="url">https://cdn.mysite.com/ads/july.jpg</span> \
+  --var logoUrl=<span class="url">https://cdn.mysite.com/logo.png</span> \
+  --output ./output/july-ad.mp4 \
+  --quality high \
+  --resolution 1920x1080</div>
+
+    <h3>Export From Web Player (Planned)</h3>
+    <p>The web-based CMCG player will have an <strong>Export to MP4</strong> button. It uses <strong>FFmpeg.wasm</strong> (WebAssembly port of FFmpeg) to render in-browser — no server required for simple exports.</p>
+  </section>
+
+  <!-- TECH STACK -->
+  <section>
+    <div class="section-label">06 — Technical Architecture</div>
+    <h2>Recommended Tech Stack</h2>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">🖥️</div>Desktop / CLI Renderer</div>
+      <p><strong>Rust</strong> — your existing SpacetimeDB/Rust familiarity makes this natural. Core renderer: parse manifest → fetch sources → composite frames → encode MP4 via <code>ffmpeg-sys</code> or <code>gstreamer</code>.</p>
+      <div class="tags"><span class="tag green">Rust</span><span class="tag">ffmpeg-sys</span><span class="tag">tokio (async fetch)</span><span class="tag">serde_json</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌐</div>Web Player / Editor</div>
+      <p>A <strong>TypeScript + Canvas API</strong> web player that interprets the manifest, fetches remote assets, and composites them onto an HTML5 Canvas. Export via <strong>FFmpeg.wasm</strong>. Fits your Phaser 3 / TS stack.</p>
+      <div class="tags"><span class="tag purple">TypeScript</span><span class="tag purple">Canvas API</span><span class="tag purple">FFmpeg.wasm</span><span class="tag">Phaser 3</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-blue">📱</div>Mobile (Future)</div>
+      <p><strong>Capacitor</strong> wrapper around the web player — same codebase, packaged for iOS/Android. Already in your stack for Bob BLO.</p>
+      <div class="tags"><span class="tag">Capacitor</span><span class="tag">iOS</span><span class="tag">Android</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⚡</div>Server-Side Batch Render (Future)</div>
+      <p>Node.js or Rust service that accepts a CMCG file + variable map via REST API and returns an .mp4. Useful for ad platforms generating thousands of personalized video variants.</p>
+      <div class="tags"><span class="tag red">REST API</span><span class="tag red">batch render</span><span class="tag">Cloudways</span></div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section>
+    <div class="section-label">07 — Use Cases</div>
+    <h2>User Stories &amp; Use Cases</h2>
+    <p>The following use cases are derived from broad user archetypes and their natural pain points. Each story drives a concrete CMCG feature or workflow.</p>
+
+    <!-- ADVERTISER -->
+    <h3>📺 The Advertiser / Marketing Manager</h3>
+    <div class="callout callout-green">
+      <div class="callout-icon">💬</div>
+      <p><em>"As a marketing manager, I want to run the same video ad with different product images for different audiences, so that I don't have to re-edit and re-export 20 versions of the same video."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">✅</div>Use Case — Multi-Variant Ad from One Template</div>
+      <p>The advertiser uploads one base video to CMCG with a product image slot and a price text slot. They pass different <code>$productImage</code> and <code>$price</code> variables per audience segment — via URL param for web embeds, or via the CLI batch renderer for bulk MP4 export. Result: 50 ad variants rendered in minutes with zero re-editing.</p>
+      <div class="tags"><span class="tag green">batch render</span><span class="tag green">variable injection</span><span class="tag">MP4 export</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">✅</div>Use Case — Seasonal Content Swap</div>
+      <p>The same ad template runs year-round. The background image slot points to a remote URL that the marketing team updates on their CDN each season — summer, fall, holiday. The video is never re-encoded. The ad automatically reflects the new creative the next time it plays.</p>
+      <div class="tags"><span class="tag green">remote URL swap</span><span class="tag">no re-encode</span><span class="tag">CDN-driven</span></div>
+    </div>
+
+    <!-- CHURCH / MINISTRY -->
+    <h3>⛪ The Church or Ministry Admin</h3>
+    <div class="callout callout-purple">
+      <div class="callout-icon">💬</div>
+      <p><em>"As a church media volunteer, I want to update our weekly announcement video without needing video editing software, so that anyone on the team can do it — not just the one person who knows Premiere."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✅</div>Use Case — Weekly Announcement Video</div>
+      <p>The church has one branded .cmcg template with slots for the sermon series graphic, speaker headshot, event flyer, and scripture text overlay. Each week a non-technical volunteer updates a simple config file or web form with new image URLs and text. The template auto-generates the new announcement video — no Premiere, no After Effects, no video editor needed.</p>
+      <div class="tags"><span class="tag purple">non-technical user</span><span class="tag purple">weekly refresh</span><span class="tag">image + text slots</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✅</div>Use Case — Worship Music Swap</div>
+      <p>A lyric video template has a dynamic audio slot pointing to <code>$worshipTrack</code>. Each Sunday the worship leader drops a new song URL into the config. The lyric video re-renders with the new track automatically — same visuals, new music, zero production time.</p>
+      <div class="tags"><span class="tag purple">audio slot</span><span class="tag purple">type: audio</span><span class="tag">weekly</span></div>
+    </div>
+
+    <!-- ESPORTS / TOURNAMENT ORG -->
+    <h3>🏆 The Esports Organizer</h3>
+    <div class="callout callout-green">
+      <div class="callout-icon">💬</div>
+      <p><em>"As a tournament organizer, I want to generate a personalized winner highlight video for each match result automatically, so that players feel celebrated and share the content without me manually editing anything."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">✅</div>Use Case — Auto-Generated Winner Graphics</div>
+      <p>A CMCG template is built for match results — player name text slot, avatar image slot, team logo slot, hype audio slot. The tournament management system passes the winner's data as variables via the API at match end. A winner highlight video is rendered and ready to post within seconds of the match finishing.</p>
+      <div class="tags"><span class="tag green">API variable injection</span><span class="tag green">auto-render</span><span class="tag">real-time</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">✅</div>Use Case — Sponsor Slot Rotation</div>
+      <p>The tournament broadcast template has a sponsor logo slot. The organizer sells that slot to different sponsors per event. Swapping sponsors means updating one URL — the entire video slate for the event reflects the new sponsor instantly, with no re-render needed for live playback.</p>
+      <div class="tags"><span class="tag green">sponsor swap</span><span class="tag">remote URL</span><span class="tag">live playback</span></div>
+    </div>
+
+    <!-- INDIE GAME DEVELOPER -->
+    <h3>🎮 The Indie Game Developer</h3>
+    <div class="callout callout-purple">
+      <div class="callout-icon">💬</div>
+      <p><em>"As an indie game developer, I want to create a trailer template for my game that automatically shows the latest screenshot or character art when I update my press kit, so my trailer stays current without a full re-edit."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✅</div>Use Case — Living Game Trailer</div>
+      <p>A game trailer template has slots for a hero screenshot, a character portrait, and a Steam store badge. All three point to remote URLs in the developer's press kit folder. When the dev ships new art or updates their store assets, the trailer automatically reflects the latest visuals the next time it's played or embedded — no re-edit, no re-export.</p>
+      <div class="tags"><span class="tag purple">press kit integration</span><span class="tag purple">auto-refresh</span><span class="tag">Steam · itch.io</span></div>
+    </div>
+
+    <!-- SMALL BUSINESS / LOCAL BRAND -->
+    <h3>🏪 The Small Business Owner</h3>
+    <div class="callout callout-green">
+      <div class="callout-icon">💬</div>
+      <p><em>"As a small business owner, I want a social media video template I can update myself when I have a new promotion, so I'm not paying a designer every time I want to run a sale."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">✅</div>Use Case — Self-Serve Promo Video</div>
+      <p>The business owner purchases a branded .cmcg template from the CMCG marketplace. It has slots for a product photo, a sale price text overlay, and a background music track. They update those three things via a simple web form — no software, no designer, no video knowledge required. They export to MP4 and post to Instagram in under five minutes.</p>
+      <div class="tags"><span class="tag green">marketplace template</span><span class="tag green">MP4 export</span><span class="tag">no design skills needed</span></div>
+    </div>
+
+    <!-- DEVELOPER / PLATFORM BUILDER -->
+    <h3>👨‍💻 The Developer / Platform Builder</h3>
+    <div class="callout callout-purple">
+      <div class="callout-icon">💬</div>
+      <p><em>"As a developer building a SaaS platform, I want to programmatically generate personalized video content for each of my users at scale, so that I can offer video output as a feature without building a video pipeline from scratch."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✅</div>Use Case — Programmatic Video Generation via API</div>
+      <p>The developer sends a POST request to the CMCG batch render API with a template ID and a JSON body of variable values — one per user. The API returns rendered MP4 URLs. They can generate thousands of personalized videos (user name, avatar, achievement badge) without standing up their own video infrastructure.</p>
+      <div class="tags"><span class="tag purple">REST API</span><span class="tag purple">batch render</span><span class="tag">SaaS integration</span><span class="tag">Phase 5</span></div>
+    </div>
+
+  </section>
+
+  <hr />
+
+  <!-- MARKET LANDSCAPE -->
+  <section>
+    <div class="section-label">08 — Market Landscape</div>
+    <h2>Competitive Analysis &amp; Market Gap</h2>
+    <p>The dynamic creative optimization (DCO) market is projected to exceed <strong>$4B globally by 2027</strong>, with DCO-driven ads reporting up to 30% higher CTRs and 20% better conversion rates versus static. Yet every major player has the same architectural limitation: they treat video as a monolith.</p>
+
+    <h3>How DCO Works Today</h3>
+    <p>Platforms like Google DV360 and Meta Ads Manager do <strong>asset selection</strong> or <strong>overlay swaps</strong> — they pick from pre-made assets or layer text/images on a static base video. The base video itself never changes. Google's Director Mix lets you swap bumper elements on YouTube but caps at 15 video assets per campaign. Meta removed standalone DCO in 2023 and only shows individual asset performance, not which <em>combinations</em> worked.</p>
+
+    <div class="callout callout-red">
+      <div class="callout-icon">⚠️</div>
+      <p><strong>The production bottleneck:</strong> Teams need 10–50+ variations per month for effective testing, but only 5–10% of creatives become scalable performers. Every variant requires a full re-render. This is the problem CMCG eliminates.</p>
+    </div>
+
+    <h3>Competitive Landscape</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Approach</th>
+          <th>Limitation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Google Director Mix / PMax</td>
+          <td>Overlay swaps on YouTube; asset selection</td>
+          <td>Walled garden; capped at 15 assets; no in-video composition</td>
+        </tr>
+        <tr>
+          <td>Meta Flexible Ads</td>
+          <td>Algorithm picks asset combinations</td>
+          <td>No per-placement control; opaque combination reporting</td>
+        </tr>
+        <tr>
+          <td>Celtra / Clinch</td>
+          <td>Creative automation &amp; real-time DCO</td>
+          <td>Video is overlay-only, not compositional</td>
+        </tr>
+        <tr>
+          <td>Innovid (CTV-first)</td>
+          <td>Dynamic CTV ad serving with DCO</td>
+          <td>Closest competitor; still template-overlay model</td>
+        </tr>
+        <tr>
+          <td>Waymark</td>
+          <td>AI generates entire videos from brand assets</td>
+          <td>Creates new videos, no runtime slot swapping</td>
+        </tr>
+        <tr>
+          <td>Synthesia / HeyGen</td>
+          <td>AI avatar-based video generation</td>
+          <td>Talking-head only; not for product/ad creative</td>
+        </tr>
+        <tr>
+          <td>Plainly Videos</td>
+          <td>After Effects template automation</td>
+          <td>Batch renders variants; re-encodes every variation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-green">
+      <div class="callout-icon">🎯</div>
+      <p><strong>The gap CMCG fills:</strong> No player offers a standardized, open <em>container format</em> for video where slots resolve at serve time without re-rendering. Everyone either pre-renders all variants, overlays on static video, or generates entirely new videos with AI. CMCG is architecturally closer to how HTML works — and that's the unlock.</p>
+    </div>
+  </section>
+
+  <!-- AI INTEGRATION -->
+  <section>
+    <div class="section-label">09 — AI Integration Strategy</div>
+    <h2>AI as the Runtime Decision Engine</h2>
+    <p>86% of advertisers use or plan to use generative AI for video ad creative, with GenAI expected to power <strong>40% of all video ad creative by 2026</strong>. AI-personalized video ads show <strong>6–9 percentage point CTR improvement</strong> over both personalized image ads and generic video. The industry is shifting toward <strong>agentic AI</strong> — systems that autonomously plan, decide, and act.</p>
+
+    <p>AI today generates <em>whole new videos</em> or picks from <em>pre-made assets</em>. There is no widely adopted system where AI makes <strong>granular, slot-level decisions within a single video template at serve time</strong>. This is CMCG's platform play: the template is the creative scaffolding, AI is the runtime decision engine that fills it.</p>
+
+    <h3>Slot-Level Decisions AI Can Make</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><div class="icon icon-green">🖼️</div>Visual Slots</div>
+        <p>Select which product image fills the hero slot. Choose spokesperson clip from a library. Adjust color theme to match brand, season, or content genre. Pick background scene variant.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-purple">✍️</div>Text &amp; CTA Slots</div>
+        <p>Choose CTA text variant based on performance data. Swap headline copy per audience segment. Adjust offer text based on funnel stage (awareness → consideration → conversion).</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-blue">🎵</div>Audio Slots</div>
+        <p>Select background music mood matching content being watched. Swap voiceover language for regional targeting. Choose hype track per event or audience energy level.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-red">🏷️</div>End Card Slots</div>
+        <p>Select end-card offer based on viewer's funnel stage. Choose which testimonial clip to insert. Pick store badge (App Store vs. Google Play) based on device.</p>
+      </div>
+    </div>
+
+    <h3>Data Signals (Privacy-Safe)</h3>
+    <p>The AI decision layer uses <strong>contextual and first-party signals only</strong> — no cross-site behavioral tracking required:</p>
+    <div class="tags">
+      <span class="tag green">time of day</span>
+      <span class="tag green">weather</span>
+      <span class="tag green">device type</span>
+      <span class="tag green">content genre</span>
+      <span class="tag green">geographic region</span>
+      <span class="tag purple">purchase history (1P)</span>
+      <span class="tag purple">loyalty tier (1P)</span>
+      <span class="tag purple">browsing category (1P)</span>
+      <span class="tag red">slot combo performance loops</span>
+      <span class="tag red">creative harmony scoring</span>
+      <span class="tag red">attention heatmap predictions</span>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">🧠</div>
+      <p><strong>The feedback loop:</strong> AI learns which slot <em>combinations</em> drive higher completion rates, CTR, and conversions per audience segment over time. Unlike Meta's opaque algorithm, CMCG's slot-level architecture makes every decision transparent and auditable — advertisers can see exactly which hero image + CTA + end card combination won.</p>
+    </div>
+  </section>
+
+  <!-- USER EXPERIENCE -->
+  <section>
+    <div class="section-label">10 — User Experience &amp; Personalization</div>
+    <h2>Relevance Without Surveillance</h2>
+    <p>Research shows a clear tension in personalized advertising. The opportunity is massive — but the execution determines whether users engage or recoil.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><div class="icon icon-green">📈</div>The Upside</div>
+        <p>DCO-driven ads achieve <strong>~30% higher CTR</strong> and <strong>20% better conversions</strong> vs. static. AI-personalized video ads show <strong>6–9 percentage point CTR improvement</strong>. Consumers prefer ads that match their context and interests.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon icon-red">😬</div>The Downside</div>
+        <p><strong>60% of consumers</strong> report discomfort with AI-driven personalization. <strong>30% unsubscribe</strong> because ads feel "creepy." Each 1-point increase in reactance on a 7-point scale reduces purchase intent by half a point.</p>
+      </div>
+    </div>
+
+    <p>The mechanism is well-understood: perceived <strong>surveillance</strong> drives creepiness. Retargeting someone with the exact product they browsed 30 seconds ago feels invasive. But swapping a hero image to match their region, season, or the content they're watching feels <em>helpful</em>.</p>
+
+    <div class="callout callout-green">
+      <div class="callout-icon">🎯</div>
+      <p><strong>CMCG's sweet spot:</strong> Slot-based personalization enables <strong>contextual</strong> personalization — location, time of day, weather, content genre, device — without requiring invasive behavioral tracking. The ad feels relevant because it matches the <em>context</em>, not because it stalked the user across the internet. This is the personalization model that research shows users actually welcome.</p>
+    </div>
+
+    <h3>Vendor Value Proposition</h3>
+    <ol class="steps">
+      <li><p><strong>Eliminate the re-encode bottleneck.</strong> One template, infinite variants at serve time. No render farm required for personalization.</p></li>
+      <li><p><strong>Transparent creative intelligence.</strong> Unlike Meta's opaque algorithm, every slot decision is auditable. Advertisers see exactly what won and why.</p></li>
+      <li><p><strong>Cross-device continuity.</strong> Same .cmcg template plays on CTV, mobile, and web — slots resolve per device context without maintaining separate campaigns.</p></li>
+      <li><p><strong>Privacy-forward by architecture.</strong> Contextual signals replace behavioral tracking. Ready for a cookieless, privacy-regulated future.</p></li>
+    </ol>
+  </section>
+
+  <hr />
+
+  <!-- ROADMAP -->
+  <section>
+    <div class="section-label">11 — Roadmap</div>
+    <h2>Build Phases</h2>
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-num">1</div>
+        <div class="phase-content">
+          <h4>Spec &amp; Proof of Concept</h4>
+          <p>Finalize the .cmcg manifest schema. Build a minimal TypeScript Canvas player that parses a manifest, fetches one remote image, and composites it onto a base video. Prove the concept works.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">2</div>
+        <div class="phase-content">
+          <h4>Web Player MVP</h4>
+          <p>Full timeline support (multiple slots, multiple types). Variable injection via URL params. Basic MP4 export via FFmpeg.wasm. Shareable .cmcg files that play in a browser.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">3</div>
+        <div class="phase-content">
+          <h4>CLI Renderer (Rust)</h4>
+          <p>Command-line tool for server-side / batch rendering. Accepts .cmcg + variable flags, outputs .mp4. Full quality export, no browser needed.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">4</div>
+        <div class="phase-content">
+          <h4>Template Editor GUI</h4>
+          <p>Visual editor for creating .cmcg templates — drag-and-drop slot placement, timeline UI, live preview. Think Canva meets a video editor, but for dynamic templates.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">5</div>
+        <div class="phase-content">
+          <h4>API &amp; Marketplace</h4>
+          <p>REST API for batch rendering. Marketplace for sharing/selling .cmcg templates. Potential SaaS layer — "render 1000 personalized ad videos for $X."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOLVED DECISIONS -->
+  <section>
+    <div class="section-label">12 — Resolved Decisions</div>
+    <h2>Design Decisions Locked</h2>
+    <p>The following questions have been answered and are now considered spec-level decisions for v1.</p>
+
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-title"><div class="icon icon-green">📦</div>File Format — Custom Binary (End Goal)</div>
+      <p><strong>Decision:</strong> Start with ZIP for simplicity in v0.1, but the end-game target is a <strong>custom binary format</strong>. ZIP gives you fast iteration and free tooling. Once the spec stabilizes, migrate to a purpose-built binary that is more compact, faster to parse, and harder to reverse-engineer casually.</p>
+      <p>The binary format also opens the door to better DRM integration at the byte level — something ZIP can't cleanly support.</p>
+      <div class="tags"><span class="tag green">v0.1: ZIP</span><span class="tag purple">v1.0+: Custom Binary</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔐</div>DRM / Template Protection — Deferred, Architecture Reserved</div>
+      <p><strong>Decision:</strong> No hard stance yet, but the architecture must <em>leave room for it</em>. When building the binary format, reserve an encryption header block so DRM can be bolted on later without breaking the spec. This way the decision doesn't have to be made now but the option isn't closed off.</p>
+      <p>If the template marketplace becomes real, DRM becomes essential — creators need to know their base video can't just be unzipped and extracted.</p>
+      <div class="tags"><span class="tag">encryption header reserved</span><span class="tag red">revisit at Phase 4</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-blue">🔒</div>Remote Fetch Security — HTTPS-Only + Allowlist</div>
+      <p><strong>Decision:</strong> Best balance of security and web usability is <strong>HTTPS-only enforcement</strong> (no plain HTTP sources ever) combined with an <strong>optional per-template domain allowlist</strong>. If no allowlist is defined, any HTTPS source is permitted. If one is defined, only those domains can be fetched.</p>
+      <p>CORS is handled at the browser level naturally for the web player. The CLI renderer will enforce HTTPS at the fetch layer in Rust. This keeps it secure by default without being so restrictive it breaks real-world use cases.</p>
+      <div class="tags"><span class="tag green">HTTPS-only enforced</span><span class="tag green">allowlist optional</span><span class="tag">CORS browser-native</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💾</div>Caching Strategy — User-Configurable</div>
+      <p><strong>Decision:</strong> Caching is <strong>user-configurable per slot</strong>, with sensible defaults. Three modes supported:</p>
+      <p><strong>none</strong> — always fetch fresh (live ads, real-time content). <strong>session</strong> — cached for the duration of one playback session (default). <strong>permanent</strong> — cached locally until manually cleared (offline-friendly templates).</p>
+      <p>The manifest can set a default cache mode globally, and individual slots can override it. This gives template creators full control without forcing one-size-fits-all behavior.</p>
+      <div class="tags"><span class="tag">none</span><span class="tag green">session (default)</span><span class="tag purple">permanent</span><span class="tag">per-slot override</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">🎵</div>Audio Slots — YES, Included in v1</div>
+      <p><strong>Decision:</strong> Dynamic audio slots are <strong>in scope for v1</strong>. A slot type of <code>"audio"</code> works identically to image/video slots — it has a start time, duration, and a source resolver chain (variable → local → remote → fallback). This enables swapping background music tracks, voiceover clips, or sound effects via URL.</p>
+      <p>This unlocks huge value for church/ministry use (swap the worship song each week), esports (swap the hype track per event), and ads (regional audio/language swaps without re-encoding the video).</p>
+      <div class="tags"><span class="tag green">type: "audio" confirmed</span><span class="tag green">v1 scope</span><span class="tag">music · voiceover · SFX</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💰</div>Monetization — Open Format + Commercial Layer</div>
+      <p><strong>Decision:</strong> CMCG is built as an <strong>open format</strong> (published to GitHub, BSL licensed) with a <strong>commercial layer on top</strong>. The spec and reference player are open so the format can grow into a standard. Revenue comes from the template marketplace, the batch render API, and the visual editor GUI — all of which stay proprietary.</p>
+      <p>Primary early markets: <strong>churches &amp; ministries</strong> (Bearded Digital client overlap), <strong>esports orgs</strong> (Toxic Tournaments overlap), and <strong>small ad agencies</strong> who need personalized video at volume without a full production team.</p>
+      <div class="tags"><span class="tag green">spec: BSL open</span><span class="tag purple">editor: proprietary</span><span class="tag purple">API: paid</span><span class="tag purple">marketplace: revenue share</span></div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <hr />
+  <section style="margin-top: 32px; text-align: center;">
+    <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--muted);">
+      CMCG — Connected Media Container &amp; Generator &nbsp;·&nbsp; Nostalgia Nuke LLC &nbsp;·&nbsp; v0.3 &nbsp;·&nbsp; 2026
+    </p>
+  </section>
+
+</div>
+</body>
+</html>

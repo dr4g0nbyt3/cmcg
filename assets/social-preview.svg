@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0f1a"/>
+      <stop offset="60%" style="stop-color:#111428"/>
+      <stop offset="100%" style="stop-color:#0b1220"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4fffb0"/>
+      <stop offset="100%" style="stop-color:#7b61ff"/>
+    </linearGradient>
+    <radialGradient id="purpleGlow" cx="85%" cy="15%" r="40%">
+      <stop offset="0%" style="stop-color:#7b61ff;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#7b61ff;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="greenGlow" cx="15%" cy="85%" r="35%">
+      <stop offset="0%" style="stop-color:#4fffb0;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#4fffb0;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#purpleGlow)"/>
+  <rect width="1280" height="640" fill="url(#greenGlow)"/>
+
+  <!-- Border -->
+  <rect x="0" y="0" width="1280" height="640" fill="none" stroke="#252840" stroke-width="1"/>
+
+  <!-- Logo play icon -->
+  <polygon points="580,200 640,235 580,270" fill="none" stroke="url(#glow)" stroke-width="3" stroke-linejoin="round" opacity="0.3"/>
+
+  <!-- Title -->
+  <text x="640" y="290" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="800" letter-spacing="0.02em" fill="#ffffff">CMCG</text>
+
+  <!-- Subtitle -->
+  <text x="640" y="340" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="22" font-weight="300" fill="#7b7f9e">Connected Media Container &amp; Generator</text>
+
+  <!-- Tagline -->
+  <text x="640" y="390" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="18" fill="#4fffb0">A dynamic video template format — like HTML, but for video.</text>
+
+  <!-- Slot visualization -->
+  <rect x="340" y="430" width="600" height="80" rx="8" fill="#131520" stroke="#252840" stroke-width="1"/>
+  <!-- Simulated slots -->
+  <rect x="355" y="445" width="120" height="50" rx="4" fill="#1b1e2e" stroke="#4fffb0" stroke-width="1" opacity="0.6"/>
+  <text x="415" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#4fffb0" opacity="0.8">$logo</text>
+  <rect x="490" y="445" width="200" height="50" rx="4" fill="#1b1e2e" stroke="#7b61ff" stroke-width="1" opacity="0.6"/>
+  <text x="590" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#7b61ff" opacity="0.8">$adImage</text>
+  <rect x="705" y="445" width="220" height="50" rx="4" fill="#1b1e2e" stroke="#4fffb0" stroke-width="1" opacity="0.4"/>
+  <text x="815" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#4fffb0" opacity="0.6">$ctaText</text>
+
+  <!-- Bottom label -->
+  <text x="640" y="570" text-anchor="middle" font-family="monospace" font-size="11" letter-spacing="0.15em" fill="#7b7f9e">OPEN FORMAT  ·  SLOT-BASED  ·  VARIABLE-DRIVEN  ·  NO RE-ENCODING</text>
+</svg>

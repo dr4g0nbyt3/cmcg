@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" rx="16" fill="#131520"/>
+  <rect x="1" y="1" width="178" height="178" rx="15" fill="none" stroke="#252840" stroke-width="2"/>
+  <text x="90" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" font-weight="800" fill="#4fffb0">C</text>
+  <text x="90" y="115" text-anchor="middle" font-family="monospace" font-size="11" fill="#7b7f9e">LOGO SLOT</text>
+</svg>

@@ -1,0 +1,80 @@
+:root {
+  --bg: #0b0c10;
+  --surface: #131520;
+  --border: #252840;
+  --accent: #4fffb0;
+  --text: #e8eaf6;
+  --muted: #7b7f9e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+#app {
+  max-width: 960px;
+  width: 100%;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+h1 .dim {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.5em;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+#player-container {
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+#player-container video,
+#player-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+#controls button {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+#controls button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

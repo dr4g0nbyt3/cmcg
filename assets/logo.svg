@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#131520"/>
+      <stop offset="100%" style="stop-color:#1b1e2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4fffb0"/>
+      <stop offset="100%" style="stop-color:#7b61ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#bg)"/>
+  <rect x="4" y="4" width="112" height="112" rx="20" fill="none" stroke="#252840" stroke-width="1.5"/>
+  <!-- Play triangle -->
+  <polygon points="44,32 88,60 44,88" fill="url(#accent)" opacity="0.15"/>
+  <polygon points="44,32 88,60 44,88" fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Slot lines -->
+  <line x1="52" y1="50" x2="78" y2="50" stroke="#4fffb0" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="52" y1="58" x2="72" y2="58" stroke="#7b61ff" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="52" y1="66" x2="68" y2="66" stroke="#4fffb0" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- CMCG text -->
+  <text x="60" y="108" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="800" letter-spacing="0.1em" fill="#4fffb0">CMCG</text>
+</svg>
