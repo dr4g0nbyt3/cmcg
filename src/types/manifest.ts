@@ -14,6 +14,19 @@ export interface SlotSource {
   fallback?: string;
 }
 
+/** Text rendering properties for text-type slots */
+export interface TextStyle {
+  content: string;
+  fontFamily?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  color?: string;
+  align?: 'left' | 'center' | 'right';
+  lineHeight?: number;
+  background?: string;
+  padding?: number;
+}
+
 /** A single media slot in the CMCG timeline */
 export interface Slot {
   id: string;
@@ -24,6 +37,11 @@ export interface Slot {
   source: SlotSource;
   cache?: 'none' | 'session' | 'permanent';
   fetchTimeout?: number;
+  text?: TextStyle;
+  /** Volume for audio/video slots (0.0 - 1.0) */
+  volume?: number;
+  /** Whether a video slot should loop within its duration */
+  loop?: boolean;
 }
 
 /** Video metadata */

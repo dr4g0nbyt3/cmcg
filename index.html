@@ -3,19 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CMCG Player — Proof of Concept</title>
+  <title>CMCG Player — Web Player MVP</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
   <div id="app">
-    <h1>CMCG <span class="dim">// Proof of Concept</span></h1>
-    <p class="subtitle">Dynamic video template with live slot compositing</p>
-    <div id="player-container"></div>
-    <div id="controls">
-      <button id="play-btn">▶ Play</button>
-      <button id="pause-btn">⏸ Pause</button>
+    <header id="header">
+      <div class="header-left">
+        <h1>CMCG <span class="dim">Player</span></h1>
+        <span class="version">v0.2.0</span>
+      </div>
+      <div class="header-right">
+        <label class="file-picker" id="file-picker-label">
+          <input type="file" id="file-picker" accept=".cmcg,.zip" />
+          Open .cmcg
+        </label>
+      </div>
+    </header>
+
+    <div id="player-section">
+      <div id="player-container"></div>
+
+      <!-- Timeline scrubber -->
+      <div id="timeline">
+        <span id="time-current">0:00</span>
+        <input type="range" id="scrubber" min="0" max="100" step="0.1" value="0" />
+        <span id="time-total">0:00</span>
+      </div>
+
+      <!-- Controls -->
+      <div id="controls">
+        <div class="controls-left">
+          <button id="play-btn" class="btn-primary">Play</button>
+          <button id="pause-btn">Pause</button>
+        </div>
+        <div class="controls-right">
+          <button id="export-btn" class="btn-accent">Export MP4</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panels -->
+    <div id="panels">
+      <!-- Slot Inspector -->
+      <div class="panel" id="panel-slots">
+        <div class="panel-header">Slots</div>
+        <div class="panel-body" id="slot-list">
+          <p class="muted">Load a manifest to see slots</p>
+        </div>
+      </div>
+
+      <!-- Variable Overrides -->
+      <div class="panel" id="panel-variables">
+        <div class="panel-header">Variables</div>
+        <div class="panel-body" id="variable-list">
+          <p class="muted">Load a manifest to see variables</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export progress overlay -->
+    <div id="export-overlay" class="hidden">
+      <div id="export-modal">
+        <div id="export-phase">Initializing...</div>
+        <div id="export-bar-wrapper">
+          <div id="export-bar"></div>
+        </div>
+        <div id="export-percent">0%</div>
+      </div>
     </div>
   </div>
+
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
