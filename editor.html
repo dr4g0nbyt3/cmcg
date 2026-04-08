@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMCG Editor — Template Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/editor.css" />
+</head>
+<body>
+  <div id="editor-app">
+    <!-- Header -->
+    <header id="editor-header">
+      <div class="header-left">
+        <h1>CMCG <span class="dim">Editor</span></h1>
+        <span class="version">v0.3.0</span>
+      </div>
+      <div class="header-center">
+        <input type="text" id="template-name" value="Untitled Template" placeholder="Template name" />
+      </div>
+      <div class="header-right">
+        <button id="load-video-btn">Load Base Video</button>
+        <input type="file" id="video-picker" accept="video/*" style="display:none" />
+        <button id="open-cmcg-btn">Open .cmcg</button>
+        <input type="file" id="cmcg-picker" accept=".cmcg,.zip" style="display:none" />
+        <button id="save-cmcg-btn" class="btn-accent">Save .cmcg</button>
+        <button id="save-json-btn">Export JSON</button>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div id="editor-body">
+      <!-- Left: Canvas Preview -->
+      <div id="preview-section">
+        <div id="editor-canvas-container">
+          <video id="editor-video" muted playsinline></video>
+          <canvas id="editor-render-canvas"></canvas>
+          <canvas id="editor-overlay-canvas"></canvas>
+        </div>
+
+        <!-- Playback Controls -->
+        <div id="editor-controls">
+          <button id="editor-play-btn" class="btn-primary">Play</button>
+          <button id="editor-pause-btn">Pause</button>
+          <span id="editor-time">0:00 / 0:00</span>
+          <div class="spacer"></div>
+          <!-- Add Slot Buttons -->
+          <button class="add-slot-btn" data-type="image">+ Image</button>
+          <button class="add-slot-btn" data-type="text">+ Text</button>
+          <button class="add-slot-btn" data-type="video">+ Video</button>
+          <button class="add-slot-btn" data-type="audio">+ Audio</button>
+        </div>
+
+        <!-- Timeline -->
+        <div id="editor-timeline"></div>
+      </div>
+
+      <!-- Right: Property Panel -->
+      <div id="property-panel">
+        <div class="panel-header">Properties</div>
+        <div class="panel-body" id="props-body">
+          <p class="muted">Select a slot to edit properties</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/editor-main.ts"></script>
+</body>
+</html>

@@ -9,9 +9,18 @@ license = "BUSL-1.1"
 name = "cmcg"
 path = "src/main.rs"
 
+[[bin]]
+name = "cmcg-server"
+path = "src/server.rs"
+
 [dependencies]
 # CLI
 clap = { version = "4", features = ["derive"] }
+
+# Web server
+axum = { version = "0.8", features = ["multipart"] }
+tower-http = { version = "0.6", features = ["cors"] }
+uuid = { version = "1", features = ["v4"] }
 
 # Serialization
 serde = { version = "1", features = ["derive"] }
